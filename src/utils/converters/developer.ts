@@ -93,7 +93,7 @@ export async function convertDeveloper(fileContent: string, fromExt: string, toE
             case 'md':
             case 'sql':
                 // For text formats, we can just treat them as strings if targeting other text formats
-                if (toExt === 'txt') return fileContent; // Passthrough
+                if (toExt === 'txt' && fromExt !== 'base64') return fileContent; // Passthrough
                 if (fromExt === 'base64') {
                     jsObj = { data: typeof window !== 'undefined' ? atob(fileContent) : Buffer.from(fileContent, 'base64').toString('utf-8') };
                 } else {

@@ -10,7 +10,7 @@ export default function Home() {
       <header className="fixed top-0 w-full z-50 border-b border-border bg-background/80 backdrop-blur-md">
         <div className="max-w-[1400px] mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2.5 group cursor-pointer">
-            <div className="w-9 h-9 bg-emerald-600 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(5,150,105,0.3)] transition-transform group-hover:scale-105">
+            <div className="w-9 h-9 bg-emerald-600 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(5,150,105,0.3)] transition-transform">
               <Sparkles className="w-5 h-5 text-white" />
             </div>
             <span className="font-black text-2xl tracking-tighter text-foreground">File<span className="text-emerald-500">Converter</span></span>
