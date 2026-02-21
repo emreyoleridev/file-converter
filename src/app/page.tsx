@@ -17,7 +17,7 @@ export default function Home() {
           </div>
 
           <div className="flex items-center gap-6">
-            <a href="https://github.com/emreyoleridev" target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+            <a href="https://github.com/emreyoleridev/ultimate-file-converter" target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
               <Github className="w-5 h-5" />
             </a>
           </div>
