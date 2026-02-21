@@ -1,8 +1,6 @@
 # Universal File Converter
 
-A powerful, 100% secure, and locally-processed Advanced File Converter built with Next.js 14, Tailwind CSS, and Shadcn UI. No backend dependencies, no uploaded files—everything happens directly in your browser.
-
-Built by [Emre Yoleri](https://github.com/emreyoleridev)
+A powerful, 100% secure, and locally-processed Advanced File Converter built with Next.js 15, Tailwind CSS, and Shadcn UI. No backend dependencies, no uploaded files—everything happens directly in your browser.
 
 ## Features & Supported Formats
 
@@ -19,7 +17,7 @@ This application supports 10 distinct categories, processed as efficiently as po
 
 ## Tech Stack
 
-- **Framework**: Next.js 14 (App Router)
+- **Framework**: Next.js 15 (App Router)
 - **Styling**: Tailwind CSS v4, Framer Motion
 - **UI Components**: Shadcn UI (Radix Primitives)
 - **Core Processing**:
@@ -45,6 +43,15 @@ This application supports 10 distinct categories, processed as efficiently as po
 ## Security Notice
 
 Because this app utilizes `ffmpeg.wasm`, it relies heavily on local WebAssembly execution. All your files remain on your device and are **never** uploaded to a server.
+
+## 👤 Author
+
+Built with ❤️ by **Emre Yoleri**
+-   [GitHub](https://github.com/emreyoleridev)
+-   [Buy Me A Coffee](https://buymeacoffee.com/emreyoleridev)
+
+---
+*Disclaimer: This tool is intended for legal and professional use only. Ensure you have the rights to the documents you are processing.*
 
 ## License
 MIT

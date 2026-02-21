@@ -176,9 +176,9 @@ export function Converter() {
     const isDisabled = files.length === 0 || !outputFormat || isConverting;
 
     return (
-        <div className="w-full max-w-[800px] mx-auto font-sans relative z-10">
-            {/* Minimalist Tab Navigation */}
-            <div className="flex justify-center mb-8">
+        <div className="w-full max-w-[1100px] mx-auto font-sans relative z-10 px-4">
+            {/* Tabs Navigation - Improved Responsive Layout */}
+            <div className="flex justify-center mb-16 w-full">
                 <Tabs value={activeTab} onValueChange={(val) => {
                     setActiveTab(val as CategoryId | 'all');
                     if (val !== 'all') {
@@ -186,168 +186,145 @@ export function Converter() {
                         setOutputFormat('');
                     }
                 }} className="w-full">
-                    <TabsList className="w-full h-auto flex flex-wrap justify-center gap-x-6 gap-y-3 bg-transparent p-0 border-0">
+                    <TabsList className="!h-auto bg-muted/50 backdrop-blur-xl p-2 rounded-[2rem] border border-border flex flex-wrap items-center justify-center gap-2 w-full">
                         <TabsTrigger
                             value="all"
-                            className="flex items-center gap-1.5 px-0 py-0 text-[13px] font-semibold text-slate-400 data-[state=active]:text-[#111827] dark:data-[state=active]:text-white bg-transparent border-0 data-[state=active]:bg-transparent shadow-none transition-all hover:text-slate-600 dark:hover:text-slate-200 uppercase tracking-wide"
+                            className="!h-auto flex flex-col items-center justify-center gap-1 py-3 px-5 rounded-[1.5rem] text-[10px] sm:text-[11px] font-black uppercase tracking-[0.15em] transition-all duration-300 data-[state=active]:bg-emerald-600 data-[state=active]:text-white text-muted-foreground hover:text-foreground border-0 shadow-none min-w-[90px] sm:min-w-[110px] flex-1 sm:flex-initial"
                         >
-                            <Sparkles className="w-3.5 h-3.5 text-emerald-500" /> Magic All
+                            <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 mb-0.5" />
+                            Magic All
                         </TabsTrigger>
 
-                        {CATEGORIES.map((cat) => (
-                            <TabsTrigger
-                                key={cat.id}
-                                value={cat.id}
-                                className="flex items-center gap-1.5 px-0 py-0 text-[13px] font-semibold text-slate-400 data-[state=active]:text-[#111827] dark:data-[state=active]:text-white bg-transparent border-0 data-[state=active]:bg-transparent shadow-none transition-all hover:text-slate-600 dark:hover:text-slate-200 uppercase tracking-wide capitalize"
-                            >
-                                {getIconForCategory(cat.id)}
-                                {cat.name}
-                            </TabsTrigger>
-                        ))}
+                        {CATEGORIES.map((cat, index) => {
+                            const trigger = (
+                                <TabsTrigger
+                                    key={cat.id}
+                                    value={cat.id}
+                                    className="!h-auto flex flex-col items-center justify-center gap-1 py-3 px-5 rounded-[1.5rem] text-[10px] sm:text-[11px] font-black uppercase tracking-[0.15em] transition-all duration-300 data-[state=active]:bg-foreground data-[state=active]:text-background text-muted-foreground hover:text-foreground border-0 shadow-none min-w-[90px] sm:min-w-[110px] flex-1 sm:flex-initial"
+                                >
+                                    <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 mb-0.5 flex items-center justify-center">
+                                        {getIconForCategory(cat.id)}
+                                    </div>
+                                    {cat.name}
+                                </TabsTrigger>
+                            );
+
+                            // "Magic All" + 5 categories = 6 top row items. Index 4 is the 5th category.
+                            if (index === 4) {
+                                return [
+                                    trigger,
+                                    <div key="break" className="hidden min-[900px]:block basis-full h-0" />
+                                ];
+                            }
+
+                            return trigger;
+                        })}
                     </TabsList>
                 </Tabs>
             </div>
 
-            {/* Main Primary Interaction Box */}
-            <div className="bg-white dark:bg-[#18181B] rounded-[2.5rem] shadow-[0_30px_70px_-20px_rgba(0,0,0,0.06)] dark:shadow-[0_30px_70px_-20px_rgba(0,0,0,0.3)] border border-slate-100/80 dark:border-zinc-800/50 p-6 sm:p-12 flex flex-col gap-10">
+            {/* Main Converter Card */}
+            <div className="bg-card/50 backdrop-blur-sm rounded-[2rem] border border-border p-4 sm:p-6 shadow-2xl transition-colors duration-500 relative z-10">
 
-                <div className="text-center space-y-2">
-                    <h2 className="text-[32px] font-bold tracking-tight text-[#111827] dark:text-white">
-                        {activeTab === 'all'
-                            ? "Drop any file to begin"
-                            : `Upload ${effectiveCategory} files`}
-                    </h2>
-                    <p className="text-[15.5px] text-[#6B7280] dark:text-gray-400 font-medium">
-                        {activeTab === 'all'
-                            ? "We'll automatically detect the type and show options."
-                            : `Upload your ${effectiveCategory} files to convert them instantly.`}
-                    </p>
-                </div>
-
-                {/* Upload Zone */}
+                {/* Dropzone */}
                 <div
                     {...getRootProps()}
                     className={`
-                        relative overflow-hidden border border-dashed rounded-[1.5rem] p-12 sm:p-20 text-center cursor-pointer transition-all duration-400 ease-in-out flex flex-col items-center justify-center min-h-[320px]
-                        ${isDragActive ? `border-[#334155] bg-[#F8FAFC] dark:bg-zinc-800/40 scale-[1.005]` : `border-[#E5E7EB] dark:border-zinc-800/80 hover:border-[#64748B] dark:hover:border-zinc-600 hover:bg-[#F9FAFB] dark:hover:bg-zinc-800/20`}
+                        relative border border-dashed rounded-[1.5rem] p-10 sm:p-16 text-center cursor-pointer transition-all duration-500
+                        ${isDragActive ? `border-emerald-500 bg-emerald-500/5 scale-[0.99]` : `border-border hover:border-emerald-500/50 hover:bg-muted/30`}
                     `}
                 >
-                    <div className="absolute inset-0 bg-transparent" />
                     <input {...getInputProps()} />
 
-                    <div className="w-16 h-16 mx-auto mb-6 rounded-full flex items-center justify-center bg-[#F3F4F6] dark:bg-zinc-800 text-[#94A3B8] group-hover:bg-[#E5E7EB] dark:group-hover:bg-zinc-700 transition-colors">
-                        <Upload className="w-7 h-7 stroke-[1.8]" />
+                    <div className="w-12 h-12 mx-auto mb-6 rounded-full bg-muted flex items-center justify-center text-muted-foreground">
+                        <Upload className="w-6 h-6 stroke-[1.5]" />
                     </div>
 
-                    <p className="text-[22px] font-bold text-[#111827] dark:text-white">
-                        {isDragActive ? 'Drop them right here' : 'Drag & drop your files'}
-                    </p>
-                    <p className="text-[#6B7280] dark:text-gray-400 mt-3 font-medium text-[15px] max-w-sm mx-auto leading-relaxed">
-                        Support up to high resolutions. We compress & convert instantly on your device.
+                    <h2 className="text-xl sm:text-2xl font-black tracking-tight text-foreground mb-2">
+                        {isDragActive ? 'Drop files here' : 'Click to upload or drag and drop'}
+                    </h2>
+                    <p className="text-muted-foreground font-bold text-xs tracking-wide">
+                        Any size. 100% processed entirely on your device.
                     </p>
                 </div>
 
+                {/* File List */}
                 {files.length > 0 && (
-                    <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 border-t border-slate-100 dark:border-zinc-800/50 pt-8">
-                        <div className="flex items-center justify-between mb-5 px-1">
-                            <h3 className="font-bold text-[17px] text-[#111827] dark:text-white">
-                                Selected Files ({files.length})
-                            </h3>
-                            {activeTab === 'all' && detectedCategory && (
-                                <span className="px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest text-emerald-700 dark:text-emerald-400 bg-emerald-100/60 dark:bg-emerald-900/20">
-                                    Type: {detectedCategory}
-                                </span>
-                            )}
-                        </div>
-
-                        <div className="space-y-3 max-h-[220px] overflow-y-auto px-1 custom-scrollbar">
-                            {files.map((file, i) => {
-                                const ext = file.name.split('.').pop()?.toUpperCase() || 'FILE';
-                                return (
-                                    <div key={i} className="group flex items-center justify-between p-4 rounded-2xl bg-[#F8FAFC]/50 dark:bg-zinc-900/60 border border-slate-200/60 dark:border-zinc-800/60 shadow-none hover:border-[#CBD5E1] dark:hover:border-zinc-700 transition-all">
-                                        <div className="flex items-center gap-4 overflow-hidden">
-                                            <div className="w-11 h-11 shrink-0 rounded-xl flex items-center justify-center bg-white dark:bg-zinc-800 text-[#94A3B8] font-bold text-[11px] shadow-sm border border-slate-100 dark:border-zinc-700/40 uppercase">
-                                                {ext}
-                                            </div>
-                                            <div className="truncate">
-                                                <p className="font-semibold text-[14.5px] truncate text-[#111827] dark:text-white leading-none mb-1.5">{file.name}</p>
-                                                <p className="text-[12.5px] font-medium text-[#94A3B8] dark:text-gray-500 uppercase tracking-tighter italic">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
-                                            </div>
-                                        </div>
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            onClick={(e) => { e.stopPropagation(); removeFile(i); }}
-                                            className="opacity-0 group-hover:opacity-100 transition-opacity text-slate-400 hover:text-red-500 hover:bg-white dark:hover:bg-zinc-800 rounded-full h-9 w-9"
-                                        >
-                                            <Trash2 className="w-4 h-4" />
-                                        </Button>
+                    <div className="mt-10 space-y-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                        {files.map((file, i) => (
+                            <div key={i} className="flex items-center justify-between p-4 rounded-2xl bg-muted/40 border border-border">
+                                <div className="flex items-center gap-4 overflow-hidden">
+                                    <div className="w-10 h-10 shrink-0 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-black text-[10px]">
+                                        {file.name.split('.').pop()?.toUpperCase() || 'FILE'}
                                     </div>
-                                );
-                            })}
-                        </div>
+                                    <div className="truncate text-left">
+                                        <p className="font-bold text-sm text-foreground truncate">{file.name}</p>
+                                        <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider mt-0.5">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                                    </div>
+                                </div>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={(e) => { e.stopPropagation(); removeFile(i); }}
+                                    className="text-gray-500 hover:text-red-500 hover:bg-red-500/10 rounded-full h-8 w-8"
+                                >
+                                    <Trash2 className="w-4 h-4" />
+                                </Button>
+                            </div>
+                        ))}
                     </div>
                 )}
 
-                {/* Footer Interaction Zone */}
-                <div className="pt-8 border-t border-slate-100 dark:border-zinc-800/50">
-                    <div className="flex flex-col sm:flex-row items-end justify-between gap-6">
-                        <div className="w-full sm:w-[240px] space-y-3">
-                            <Label htmlFor="output-format" className="text-[11px] font-bold uppercase tracking-[0.1em] text-[#94A3B8] dark:text-gray-500 ml-1">
-                                CONVERT TO
-                            </Label>
-                            <Select value={outputFormat} onValueChange={setOutputFormat}>
-                                <SelectTrigger id="output-format" className="h-[3rem] rounded-xl text-[15px] font-semibold border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:shadow-sm transition-all focus:ring-slate-300 dark:focus:ring-zinc-700">
-                                    <SelectValue placeholder="Select output format" />
-                                </SelectTrigger>
-                                <SelectContent className="rounded-xl border-slate-200 dark:border-zinc-800 shadow-xl max-h-[300px]">
-                                    {currentFormats.out.map((fmt) => (
-                                        <SelectItem key={fmt} value={fmt} className="text-[14px] font-semibold py-3 uppercase cursor-pointer hover:bg-slate-50 dark:hover:bg-zinc-800">
-                                            .{fmt}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-
-                        <Button
-                            onClick={handleConvert}
-                            className={`
-                                w-full sm:w-[200px] h-[3rem] rounded-xl text-[15.5px] font-bold transition-all duration-300
-                                ${isDisabled
-                                    ? 'bg-[#F9FAFB] dark:bg-zinc-900 text-[#CBD5E1] dark:text-zinc-700 shadow-none border border-slate-100 dark:border-zinc-800 pointer-events-none'
-                                    : 'bg-[#111827] dark:bg-white text-white dark:text-slate-900 hover:bg-black dark:hover:bg-slate-100 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1)] active:scale-[0.98]'
-                                }
-                            `}
-                            disabled={isDisabled}
-                        >
-                            {isConverting ? (
-                                <>
-                                    <Loader2 className="w-5 h-5 mr-3 animate-spin" />
-                                    Converting...
-                                </>
-                            ) : (
-                                files.length > 1 ? `Convert All (${files.length})` : 'Convert Files'
-                            )}
-                        </Button>
+                {/* Action Bar */}
+                <div className="mt-10 pt-10 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-6">
+                    <div className="w-full sm:w-[280px]">
+                        <Select value={outputFormat} onValueChange={setOutputFormat}>
+                            <SelectTrigger className="h-[3.5rem] rounded-2xl border-border bg-muted/50 text-foreground font-black uppercase tracking-wider hover:bg-muted transition-all">
+                                <SelectValue placeholder="Convert To" />
+                            </SelectTrigger>
+                            <SelectContent className="bg-popover border-border text-popover-foreground rounded-2xl">
+                                {currentFormats.out.map((fmt) => (
+                                    <SelectItem key={fmt} value={fmt} className="font-black uppercase tracking-widest py-3">
+                                        {fmt}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
 
-                    {activeTab === 'all' && !detectedCategory && files.length === 0 && (
-                        <p className="text-[13.5px] font-medium text-amber-600 dark:text-amber-500 text-center mt-6">
-                            Upload a file first so we can determine available output formats.
-                        </p>
-                    )}
-
-                    {isConverting && (
-                        <div className="pt-8 space-y-3 animate-in fade-in duration-300">
-                            <div className="flex justify-between text-[12px] font-bold tracking-widest uppercase text-slate-500 dark:text-slate-400">
-                                <span className="animate-pulse">Processing Files...</span>
-                                <span>{Math.round(progress)}%</span>
+                    {/* Action Buttons */}
+                    <Button
+                        onClick={handleConvert}
+                        disabled={isDisabled}
+                        className={`
+                                w-full sm:w-[240px] h-[3.5rem] rounded-2xl text-[14px] font-black uppercase tracking-[0.1em] transition-all duration-500
+                                ${isDisabled
+                                ? 'bg-muted text-muted-foreground opacity-50'
+                                : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-[0_8px_30px_rgb(5,150,105,0.3)] hover:shadow-[0_8px_40px_rgb(5,150,105,0.4)] hover:-translate-y-0.5'
+                            }
+                            `}
+                    >
+                        {isConverting ? (
+                            <div className="flex items-center gap-2">
+                                <Loader2 className="w-5 h-5 animate-spin" />
+                                Processing
                             </div>
-                            <Progress value={progress} className="h-1.5 rounded-full bg-slate-100 dark:bg-zinc-800 overflow-hidden [&>div]:bg-[#111827] dark:[&>div]:bg-white" />
-                        </div>
-                    )}
+                        ) : (
+                            'Convert Now'
+                        )}
+                    </Button>
                 </div>
+
+                {/* Progress Bar */}
+                {isConverting && (
+                    <div className="mt-8 space-y-3">
+                        <div className="flex justify-between text-[11px] font-black tracking-widest uppercase text-emerald-500">
+                            <span>Processing locally</span>
+                            <span>{Math.round(progress)}%</span>
+                        </div>
+                        <Progress value={progress} className="h-2 rounded-full bg-muted overflow-hidden [&>div]:bg-emerald-500" />
+                    </div>
+                )}
             </div>
         </div>
     );
